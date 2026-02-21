@@ -5,16 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  ArrowRight,
-  Cake,
-  Mail,
-  Phone,
-  Building,
-  Briefcase,
-  Calendar,
-  MessageSquare,
-} from "lucide-react";
+import { ArrowRight, Cake, Mail, Phone, Building, Briefcase, Calendar, MessageSquare } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Customer = Tables<"customers">;
@@ -42,12 +33,12 @@ const CustomerProfile = () => {
     });
   }, [user, id]);
 
-  if (!customer) return <div className="text-center py-12 text-muted-foreground">טוען...</div>;
+  if (!customer) return <div className="text-center py-12 text-muted-foreground animate-fade-in">טוען...</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => navigate("/customers")}>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex items-center gap-3 animate-fade-in-up">
+        <Button variant="ghost" size="icon" onClick={() => navigate("/customers")} className="hover:bg-primary/10 transition-colors">
           <ArrowRight className="w-4 h-4" />
         </Button>
         <div>
@@ -60,51 +51,20 @@ const CustomerProfile = () => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Contact info */}
-        <Card className="md:col-span-1">
+        <Card className="md:col-span-1 card-hover animate-fade-in-up stagger-1">
           <CardHeader><CardTitle className="text-base">פרטי קשר</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            {customer.email && (
-              <div className="flex items-center gap-2 text-sm">
-                <Mail className="w-4 h-4 text-muted-foreground" />
-                <span dir="ltr">{customer.email}</span>
-              </div>
-            )}
-            {customer.phone && (
-              <div className="flex items-center gap-2 text-sm">
-                <Phone className="w-4 h-4 text-muted-foreground" />
-                <span dir="ltr">{customer.phone}</span>
-              </div>
-            )}
-            {customer.organization && (
-              <div className="flex items-center gap-2 text-sm">
-                <Building className="w-4 h-4 text-muted-foreground" />
-                <span>{customer.organization}</span>
-              </div>
-            )}
-            {customer.role && (
-              <div className="flex items-center gap-2 text-sm">
-                <Briefcase className="w-4 h-4 text-muted-foreground" />
-                <span>{customer.role}</span>
-              </div>
-            )}
-            {customer.birth_date && (
-              <div className="flex items-center gap-2 text-sm">
-                <Cake className="w-4 h-4 text-muted-foreground" />
-                <span>{new Date(customer.birth_date).toLocaleDateString("he-IL")}</span>
-              </div>
-            )}
-            {customer.religion_affiliation && (
-              <Badge variant="outline">{customer.religion_affiliation}</Badge>
-            )}
-            {customer.notes && (
-              <p className="text-sm text-muted-foreground border-t pt-3 mt-3">{customer.notes}</p>
-            )}
+            {customer.email && <div className="flex items-center gap-2 text-sm"><Mail className="w-4 h-4 text-muted-foreground" /><span dir="ltr">{customer.email}</span></div>}
+            {customer.phone && <div className="flex items-center gap-2 text-sm"><Phone className="w-4 h-4 text-muted-foreground" /><span dir="ltr">{customer.phone}</span></div>}
+            {customer.organization && <div className="flex items-center gap-2 text-sm"><Building className="w-4 h-4 text-muted-foreground" /><span>{customer.organization}</span></div>}
+            {customer.role && <div className="flex items-center gap-2 text-sm"><Briefcase className="w-4 h-4 text-muted-foreground" /><span>{customer.role}</span></div>}
+            {customer.birth_date && <div className="flex items-center gap-2 text-sm"><Cake className="w-4 h-4 text-muted-foreground" /><span>{new Date(customer.birth_date).toLocaleDateString("he-IL")}</span></div>}
+            {customer.religion_affiliation && <Badge variant="outline">{customer.religion_affiliation}</Badge>}
+            {customer.notes && <p className="text-sm text-muted-foreground border-t pt-3 mt-3">{customer.notes}</p>}
           </CardContent>
         </Card>
 
-        {/* Events timeline */}
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 card-hover animate-fade-in-up stagger-2">
           <CardHeader><CardTitle className="text-base flex items-center gap-2"><Calendar className="w-4 h-4" /> אירועים</CardTitle></CardHeader>
           <CardContent>
             {events.length === 0 ? (
@@ -112,16 +72,12 @@ const CustomerProfile = () => {
             ) : (
               <div className="space-y-3">
                 {events.map((ev) => (
-                  <div key={ev.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <div key={ev.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/50 transition-all duration-200 hover:bg-muted/80 hover:shadow-sm">
                     <div>
                       <p className="text-sm font-medium">{ev.event_title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(ev.event_date).toLocaleDateString("he-IL")} • {ev.event_type}
-                      </p>
+                      <p className="text-xs text-muted-foreground">{new Date(ev.event_date).toLocaleDateString("he-IL")} • {ev.event_type}</p>
                     </div>
-                    <Badge variant={ev.status === "handled" ? "secondary" : "default"}>
-                      {ev.status === "handled" ? "טופל" : "פתוח"}
-                    </Badge>
+                    <Badge variant={ev.status === "handled" ? "secondary" : "default"}>{ev.status === "handled" ? "טופל" : "פתוח"}</Badge>
                   </div>
                 ))}
               </div>
@@ -130,8 +86,7 @@ const CustomerProfile = () => {
         </Card>
       </div>
 
-      {/* Message history */}
-      <Card>
+      <Card className="card-hover animate-fade-in-up stagger-3">
         <CardHeader><CardTitle className="text-base flex items-center gap-2"><MessageSquare className="w-4 h-4" /> היסטוריית הודעות</CardTitle></CardHeader>
         <CardContent>
           {messages.length === 0 ? (
@@ -139,7 +94,7 @@ const CustomerProfile = () => {
           ) : (
             <div className="space-y-3">
               {messages.map((msg) => (
-                <div key={msg.id} className="p-3 rounded-lg bg-muted/50">
+                <div key={msg.id} className="p-3 rounded-xl bg-muted/50 transition-all duration-200 hover:bg-muted/80 hover:shadow-sm">
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-sm font-medium">{msg.subject_rendered || msg.message_type}</p>
                     <Badge variant="outline">{msg.status}</Badge>
