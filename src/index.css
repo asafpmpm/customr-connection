@@ -96,3 +96,69 @@
     font-family: 'Rubik', sans-serif;
   }
 }
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out both;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out both;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out both;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.4s ease-out both;
+  }
+
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.3s; }
+
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .card-hover:hover {
+    @apply shadow-lg -translate-y-0.5;
+  }
+
+  .btn-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+  .btn-hover:hover {
+    @apply scale-[1.02];
+  }
+  .btn-hover:active {
+    @apply scale-[0.98];
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-sm bg-card/80;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}

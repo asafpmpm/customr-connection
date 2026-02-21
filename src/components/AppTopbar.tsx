@@ -7,7 +7,7 @@ export function AppTopbar() {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="h-14 border-b bg-card flex items-center justify-between px-4 flex-shrink-0">
+    <header className="h-14 border-b bg-card/80 backdrop-blur-sm flex items-center justify-between px-4 flex-shrink-0 sticky top-0 z-10">
       <div className="flex items-center gap-3">
         <SidebarTrigger />
         <h1 className="text-sm font-medium text-foreground hidden sm:block">
