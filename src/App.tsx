@@ -13,6 +13,7 @@ import Events from "./pages/Events";
 import Templates from "./pages/Templates";
 import Campaigns from "./pages/Campaigns";
 import DailyActions from "./pages/DailyActions";
+import MessageComposer from "./pages/MessageComposer";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/customers/:id" element={<CustomerProfile />} />
               <Route path="/events" element={<Events />} />
               <Route path="/templates" element={<Templates />} />
+              <Route path="/messages/new" element={<MessageComposer />} />
               <Route path="/campaigns" element={<Campaigns />} />
               <Route path="/daily" element={<DailyActions />} />
             </Route>

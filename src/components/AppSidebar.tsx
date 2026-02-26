@@ -5,6 +5,7 @@ import {
   FileText,
   Megaphone,
   ListChecks,
+  Mail,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -25,6 +26,7 @@ const navItems = [
   { title: "לקוחות", url: "/customers", icon: Users },
   { title: "אירועים", url: "/events", icon: CalendarHeart },
   { title: "תבניות", url: "/templates", icon: FileText },
+  { title: "הודעה חדשה", url: "/messages/new", icon: Mail },
   { title: "קמפיינים", url: "/campaigns", icon: Megaphone },
   { title: "משימות היום", url: "/daily", icon: ListChecks },
 ];
