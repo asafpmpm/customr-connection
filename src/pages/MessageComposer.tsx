@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,6 +38,7 @@ const renderTemplate = (text: string, customer?: Customer) => {
 const MessageComposer = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
 
@@ -67,6 +69,18 @@ const MessageComposer = () => {
     };
     fetchData();
   }, [user]);
+
+  useEffect(() => {
+    const customerIdParam = searchParams.get("customerId");
+    const categoryParam = searchParams.get("category");
+    if (customerIdParam) setCustomerId(customerIdParam);
+
+    if (categoryParam && templates.length > 0) {
+      const defaultTemplate = templates.find(t => t.category === categoryParam && t.is_default);
+      if (defaultTemplate) setTemplateId(defaultTemplate.id);
+      setMessageType(categoryParam);
+    }
+  }, [searchParams, templates]);
 
   useEffect(() => {
     if (!template) return;

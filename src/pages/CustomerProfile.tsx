@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Cake, Mail, Phone, Building, Briefcase, Calendar, MessageSquare } from "lucide-react";
+import { ArrowRight, Cake, Mail, Phone, Building, Briefcase, Calendar, MessageSquare, Sparkles } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Customer = Tables<"customers">;
@@ -65,26 +65,44 @@ const CustomerProfile = () => {
         </Card>
 
         <Card className="md:col-span-2 card-hover animate-fade-in-up stagger-2">
-          <CardHeader><CardTitle className="text-base flex items-center gap-2"><Calendar className="w-4 h-4" /> אירועים</CardTitle></CardHeader>
-          <CardContent>
-            {events.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-6">אין אירועים</p>
-            ) : (
-              <div className="space-y-3">
-                {events.map((ev) => (
-                  <div key={ev.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/50 transition-all duration-200 hover:bg-muted/80 hover:shadow-sm">
-                    <div>
-                      <p className="text-sm font-medium">{ev.event_title}</p>
-                      <p className="text-xs text-muted-foreground">{new Date(ev.event_date).toLocaleDateString("he-IL")} • {ev.event_type}</p>
-                    </div>
-                    <Badge variant={ev.status === "handled" ? "secondary" : "default"}>{ev.status === "handled" ? "טופל" : "פתוח"}</Badge>
-                  </div>
-                ))}
-              </div>
-            )}
+          <CardHeader><CardTitle className="text-base flex items-center gap-2"><Sparkles className="w-4 h-4" /> פעולות מהירות</CardTitle></CardHeader>
+          <CardContent className="grid md:grid-cols-2 gap-3">
+            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=birthday`)}>
+              🎂 צור ברכה
+            </Button>
+            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=holiday`)}>
+              🕯️ צור הודעת חג
+            </Button>
+            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=professional`)}>
+              💼 צור מסר מקצועי
+            </Button>
+            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=marketing`)}>
+              📢 צור מסר שיווקי
+            </Button>
           </CardContent>
         </Card>
       </div>
+
+      <Card className="card-hover animate-fade-in-up stagger-2">
+        <CardHeader><CardTitle className="text-base flex items-center gap-2"><Calendar className="w-4 h-4" /> אירועים</CardTitle></CardHeader>
+        <CardContent>
+          {events.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-6">אין אירועים</p>
+          ) : (
+            <div className="space-y-3">
+              {events.map((ev) => (
+                <div key={ev.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/50 transition-all duration-200 hover:bg-muted/80 hover:shadow-sm">
+                  <div>
+                    <p className="text-sm font-medium">{ev.event_title}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(ev.event_date).toLocaleDateString("he-IL")} • {ev.event_type}</p>
+                  </div>
+                  <Badge variant={ev.status === "handled" ? "secondary" : "default"}>{ev.status === "handled" ? "טופל" : "פתוח"}</Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card className="card-hover animate-fade-in-up stagger-3">
         <CardHeader><CardTitle className="text-base flex items-center gap-2"><MessageSquare className="w-4 h-4" /> היסטוריית הודעות</CardTitle></CardHeader>
