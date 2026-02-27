@@ -65,7 +65,7 @@ const Dashboard = () => {
     const in2Days = new Date(Date.now() + 2 * 86400000);
     const in5Days = new Date(Date.now() + 5 * 86400000);
 
-    const { data: customers, error: customersError } = await supabase.from("customers").insert([
+    const demoCustomers = [
       {
         user_id: user.id,
         first_name: "דניאל",
@@ -105,26 +105,50 @@ const Dashboard = () => {
         notes: "צריכה הצעת ערך",
         is_active: true,
       },
-    ]).select("id");
+    ];
 
-    if (customersError) {
-      toast({ title: "שגיאה", description: customersError.message, variant: "destructive" });
-      return;
+    const { data: existing } = await supabase
+      .from("customers")
+      .select("email, phone")
+      .eq("user_id", user.id);
+
+    const existingEmails = new Set((existing || []).map(c => c.email).filter(Boolean) as string[]);
+    const existingPhones = new Set((existing || []).map(c => c.phone).filter(Boolean) as string[]);
+
+    const toInsert = demoCustomers.filter(c => !existingEmails.has(c.email) && !existingPhones.has(c.phone));
+
+    let customerIds: string[] = [];
+    if (toInsert.length > 0) {
+      const { data: customers, error: customersError } = await supabase.from("customers").insert(toInsert).select("id");
+      if (customersError) {
+        toast({ title: "שגיאה", description: customersError.message, variant: "destructive" });
+        return;
+      }
+      customerIds = (customers || []).map(c => c.id);
     }
 
-    const customerIds = (customers || []).map(c => c.id);
+    const { data: demoIds } = await supabase
+      .from("customers")
+      .select("id, email")
+      .eq("user_id", user.id)
+      .in("email", demoCustomers.map(c => c.email));
 
-    await supabase.from("relationship_events").insert([
-      {
-        user_id: user.id,
-        customer_id: customerIds[0],
-        event_type: "personal",
-        event_title: "פגישת המשך",
-        event_date: in2Days.toISOString().slice(0, 10),
-        notes: "להכין הצעת שיתופי פעולה",
-        status: "open",
-      },
-    ]);
+    const idByEmail = new Map((demoIds || []).map(c => [c.email, c.id]));
+    const firstId = idByEmail.get("daniel@novatech.io");
+
+    if (firstId) {
+      await supabase.from("relationship_events").insert([
+        {
+          user_id: user.id,
+          customer_id: firstId,
+          event_type: "personal",
+          event_title: "פגישת המשך",
+          event_date: in2Days.toISOString().slice(0, 10),
+          notes: "להכין הצעת שיתופי פעולה",
+          status: "open",
+        },
+      ]);
+    }
 
     await supabase.from("holidays").insert([
       {
