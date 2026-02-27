@@ -55,6 +55,38 @@ const Customers = () => {
 
   const handleSave = async () => {
     if (!user) return;
+
+    const email = (editingCustomer.email || "").trim();
+    const phone = (editingCustomer.phone || "").trim();
+    const birthDate = editingCustomer.birth_date || "";
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast({ title: "מייל לא תקין", description: "אנא הזן כתובת מייל תקינה", variant: "destructive" });
+      return;
+    }
+
+    if (phone) {
+      const digits = phone.replace(/\D/g, "");
+      if (digits.length < 7 || digits.length > 15) {
+        toast({ title: "טלפון לא תקין", description: "אנא הזן מספר טלפון תקין", variant: "destructive" });
+        return;
+      }
+    }
+
+    if (birthDate) {
+      const dt = new Date(birthDate);
+      if (isNaN(dt.getTime())) {
+        toast({ title: "תאריך לא תקין", description: "אנא הזן תאריך לידה תקין", variant: "destructive" });
+        return;
+      }
+    }
+
+    const duplicate = customers.find(c => c.id !== editingCustomer.id && ((email && c.email && c.email === email) || (phone && c.phone && c.phone === phone)));
+    if (duplicate) {
+      toast({ title: "כפילות נתונים", description: "כבר קיים לקוח עם אותו מייל או טלפון", variant: "destructive" });
+      return;
+    }
+
     const payload = { ...editingCustomer, user_id: user.id, birth_date: editingCustomer.birth_date || null } as TablesInsert<"customers">;
     if (isEditing && editingCustomer.id) {
       const { error } = await supabase.from("customers").update(payload).eq("id", editingCustomer.id);

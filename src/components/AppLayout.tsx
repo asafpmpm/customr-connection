@@ -13,6 +13,9 @@ export function AppLayout() {
           <main className="flex-1 p-6 overflow-auto">
             <Outlet />
           </main>
+          <footer className="border-t px-6 py-3 text-xs text-muted-foreground bg-card/60">
+            שימוש במידע אישי (כגון תאריך לידה/שיוך דתי) צריך להיעשות באחריות ומתוך כבוד לפרטיות הלקוח.
+          </footer>
         </div>
       </div>
     </SidebarProvider>

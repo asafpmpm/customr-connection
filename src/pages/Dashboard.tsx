@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import {
   Users,
   Cake,
@@ -18,6 +19,7 @@ import {
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [stats, setStats] = useState({
     totalCustomers: 0,
     birthdaysToday: 0,
@@ -57,6 +59,127 @@ const Dashboard = () => {
     fetchStats();
   }, [user]);
 
+  const loadDemoData = async () => {
+    if (!user) return;
+    const today = new Date();
+    const in2Days = new Date(Date.now() + 2 * 86400000);
+    const in5Days = new Date(Date.now() + 5 * 86400000);
+
+    const { data: customers, error: customersError } = await supabase.from("customers").insert([
+      {
+        user_id: user.id,
+        first_name: "דניאל",
+        last_name: "כהן",
+        role: "CTO",
+        organization: "NovaTech",
+        email: "daniel@novatech.io",
+        phone: "050-1234567",
+        birth_date: new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().slice(0, 10),
+        religion_affiliation: "יהודי",
+        notes: "נפגש בכנס 2024",
+        is_active: true,
+      },
+      {
+        user_id: user.id,
+        first_name: "ליילה",
+        last_name: "חמיד",
+        role: "VP Sales",
+        organization: "Skyline",
+        email: "layla@skyline.com",
+        phone: "052-7654321",
+        birth_date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString().slice(0, 10),
+        religion_affiliation: "מוסלמי",
+        notes: "מתעניינת בשותפות",
+        is_active: true,
+      },
+      {
+        user_id: user.id,
+        first_name: "נועה",
+        last_name: "לוי",
+        role: "Founder",
+        organization: "BrightLabs",
+        email: "noa@brightlabs.co",
+        phone: "054-9988776",
+        birth_date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 10).toISOString().slice(0, 10),
+        religion_affiliation: "נוצרי",
+        notes: "צריכה הצעת ערך",
+        is_active: true,
+      },
+    ]).select("id");
+
+    if (customersError) {
+      toast({ title: "שגיאה", description: customersError.message, variant: "destructive" });
+      return;
+    }
+
+    const customerIds = (customers || []).map(c => c.id);
+
+    await supabase.from("relationship_events").insert([
+      {
+        user_id: user.id,
+        customer_id: customerIds[0],
+        event_type: "personal",
+        event_title: "פגישת המשך",
+        event_date: in2Days.toISOString().slice(0, 10),
+        notes: "להכין הצעת שיתופי פעולה",
+        status: "open",
+      },
+    ]);
+
+    await supabase.from("holidays").insert([
+      {
+        user_id: user.id,
+        holiday_name: "פסח",
+        religion_affiliation: "יהודי",
+        holiday_date: in5Days.toISOString().slice(0, 10),
+        description: "חג האביב",
+        is_active: true,
+      },
+      {
+        user_id: user.id,
+        holiday_name: "עיד אל-פיטר",
+        religion_affiliation: "מוסלמי",
+        holiday_date: in2Days.toISOString().slice(0, 10),
+        description: "סיום הרמדאן",
+        is_active: true,
+      },
+    ]);
+
+    await supabase.from("message_templates").insert([
+      {
+        user_id: user.id,
+        template_name: "ברכת יום הולדת קצרה",
+        category: "birthday",
+        channel: "email",
+        subject_template: "מזל טוב, {first_name}!",
+        body_template: "שלום {first_name}, מאחל/ת לך יום הולדת שמח והמון הצלחה!",
+        is_default: true,
+      },
+      {
+        user_id: user.id,
+        template_name: "ברכת חג",
+        category: "holiday",
+        channel: "email",
+        subject_template: "חג שמח, {first_name}",
+        body_template: "שלום {first_name}, מאחל/ת לך חג שמח והרבה אור.",
+        is_default: true,
+      },
+    ]);
+
+    await supabase.from("campaigns").insert([
+      {
+        user_id: user.id,
+        campaign_name: "עדכון מוצר רבעוני",
+        campaign_type: "professional",
+        subject_template: "עדכון מוצר – רבעון חדש",
+        body_template: "שלום {first_name}, רצינו לשתף בעדכון האחרון...",
+        status: "ready",
+      },
+    ]);
+
+    toast({ title: "נתוני דמו נטענו" });
+  };
+
   const kpiCards = [
     { title: "סה\"כ לקוחות", value: stats.totalCustomers, icon: Users, color: "text-primary", bg: "bg-primary/10" },
     { title: "ימי הולדת היום", value: stats.birthdaysToday, icon: Cake, color: "text-pink-500", bg: "bg-pink-500/10" },
@@ -78,6 +201,9 @@ const Dashboard = () => {
           </Button>
           <Button size="sm" variant="outline" onClick={() => navigate("/campaigns")} className="gap-2 btn-hover">
             <Megaphone className="w-4 h-4" /> צור קמפיין
+          </Button>
+          <Button size="sm" variant="secondary" onClick={loadDemoData} className="gap-2 btn-hover">
+            טען דמו
           </Button>
         </div>
       </div>
