@@ -202,19 +202,17 @@ const Dashboard = () => {
           <Button size="sm" variant="outline" onClick={() => navigate("/campaigns")} className="gap-2 btn-hover">
             <Megaphone className="w-4 h-4" /> צור קמפיין
           </Button>
-          <Button size="sm" variant="secondary" onClick={loadDemoData} className="gap-2 btn-hover">
-            טען דמו
-          </Button>
           <Button
             size="sm"
-            variant="outline"
-            onClick={() => {
+            variant="secondary"
+            onClick={async () => {
+              await loadDemoData();
               localStorage.setItem("guidedTour", "start");
               window.dispatchEvent(new Event("guidedTourStart"));
             }}
             className="gap-2 btn-hover"
           >
-            דמו מודרך
+            התחל דמו
           </Button>
         </div>
       </div>
