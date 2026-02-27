@@ -87,7 +87,7 @@ const DailyActions = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" data-tour="daily-actions">
       <div className="animate-fade-in-up">
         <h1 className="text-2xl font-bold">משימות היום</h1>
         <p className="text-muted-foreground text-sm">מרכז פעולה יומי</p>

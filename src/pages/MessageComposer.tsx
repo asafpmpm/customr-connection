@@ -138,7 +138,7 @@ const MessageComposer = () => {
   if (loading) return <div className="text-center py-12 text-muted-foreground">טוען...</div>;
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" data-tour="message-composer">
       <div className="flex items-center justify-between flex-wrap gap-4 animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold">יצירת הודעה</h1>

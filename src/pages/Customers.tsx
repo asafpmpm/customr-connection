@@ -179,7 +179,7 @@ const Customers = () => {
         </div>
       </div>
 
-      <Card className="animate-fade-in-up stagger-2 shadow-sm overflow-hidden">
+      <Card className="animate-fade-in-up stagger-2 shadow-sm overflow-hidden" data-tour="customers-table">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>

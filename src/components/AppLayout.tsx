@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppTopbar } from "@/components/AppTopbar";
+import { GuidedTour } from "@/components/GuidedTour";
 
 export function AppLayout() {
   return (
@@ -16,6 +17,7 @@ export function AppLayout() {
           <footer className="border-t px-6 py-3 text-xs text-muted-foreground bg-card/60">
             שימוש במידע אישי (כגון תאריך לידה/שיוך דתי) צריך להיעשות באחריות ומתוך כבוד לפרטיות הלקוח.
           </footer>
+          <GuidedTour />
         </div>
       </div>
     </SidebarProvider>

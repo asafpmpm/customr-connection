@@ -205,11 +205,22 @@ const Dashboard = () => {
           <Button size="sm" variant="secondary" onClick={loadDemoData} className="gap-2 btn-hover">
             טען דמו
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              localStorage.setItem("guidedTour", "start");
+              window.dispatchEvent(new Event("guidedTourStart"));
+            }}
+            className="gap-2 btn-hover"
+          >
+            דמו מודרך
+          </Button>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" data-tour="dashboard-kpis">
         {kpiCards.map((kpi, i) => (
           <Card key={kpi.title} className={`card-hover animate-fade-in-up stagger-${i + 1}`}>
             <CardContent className="p-4 flex items-center gap-3">
