@@ -32,7 +32,7 @@ const renderTemplate = (text: string, customer?: Customer) => {
     "{organization}": customer?.organization || "",
     "{holiday_name}": "",
   };
-  return Object.entries(map).reduce((acc, [k, v]) => acc.replaceAll(k, v), text);
+  return Object.entries(map).reduce((acc, [k, v]) => acc.split(k).join(v), text);
 };
 
 const MessageComposer = () => {
