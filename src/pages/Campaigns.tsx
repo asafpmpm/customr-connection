@@ -43,7 +43,7 @@ const Campaigns = () => {
   const updateStatus = async (id: string, status: string) => { await supabase.from("campaigns").update({ status }).eq("id", id); fetchCampaigns(); };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" data-tour="campaigns">
       <div className="flex items-center justify-between flex-wrap gap-4 animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold">קמפיינים</h1>

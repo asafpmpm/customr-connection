@@ -41,11 +41,32 @@ export function GuidedTour() {
         selector: "[data-tour='customers-table']",
       },
       {
+        id: "events",
+        title: "אירועים",
+        body: "ניהול אירועי קשר אישיים, ימי הולדת וחגים.",
+        path: "/events",
+        selector: "[data-tour='events']",
+      },
+      {
+        id: "templates",
+        title: "תבניות הודעה",
+        body: "שמירת תבניות מאפשרת יצירת הודעות במהירות.",
+        path: "/templates",
+        selector: "[data-tour='templates']",
+      },
+      {
         id: "composer",
         title: "יצירת הודעה",
         body: "בחר לקוח ותבנית, ערוך וראה תצוגה מקדימה.",
         path: messagePath,
         selector: "[data-tour='message-composer']",
+      },
+      {
+        id: "campaigns",
+        title: "קמפיינים",
+        body: "כאן יוצרים ומנהלים קמפיינים מקצועיים/שיווקיים.",
+        path: "/campaigns",
+        selector: "[data-tour='campaigns']",
       },
       {
         id: "daily",

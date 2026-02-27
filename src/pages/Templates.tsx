@@ -57,7 +57,7 @@ const Templates = () => {
   const filtered = filterCategory === "all" ? templates : templates.filter(t => t.category === filterCategory);
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" data-tour="templates">
       <div className="flex items-center justify-between flex-wrap gap-4 animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold">תבניות הודעה</h1>
