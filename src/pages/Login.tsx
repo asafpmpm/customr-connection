@@ -86,11 +86,41 @@ const Login = () => {
   const handleDemoLogin = async () => {
     setDemoLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // First try to sign in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email: DEMO_EMAIL,
         password: DEMO_PASSWORD,
       });
-      if (error) throw error;
+
+      // If sign in fails, try to sign up (first time setup)
+      if (signInError && signInError.message.includes("Invalid login credentials")) {
+        const { error: signUpError } = await supabase.auth.signUp({
+          email: DEMO_EMAIL,
+          password: DEMO_PASSWORD,
+          options: {
+            data: {
+              full_name: "Demo User",
+            },
+          },
+        });
+
+        if (signUpError) throw signUpError;
+        
+        // After signup, try login again immediately
+        const { error: retryError } = await supabase.auth.signInWithPassword({
+          email: DEMO_EMAIL,
+          password: DEMO_PASSWORD,
+        });
+        
+        if (retryError) throw retryError;
+        
+        toast({
+          title: "משתמש דמו נוצר בהצלחה",
+          description: "מתחבר למערכת...",
+        });
+      } else if (signInError) {
+        throw signInError;
+      }
     } catch (error: any) {
       toast({
         title: "שגיאה בכניסה לדמו",
