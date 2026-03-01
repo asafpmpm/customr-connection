@@ -45,7 +45,7 @@ const bullets = [
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
+  
   const [loading, setLoading] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
   const { toast } = useToast();
@@ -57,21 +57,8 @@ const Login = () => {
     setLoading(true);
 
     try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: window.location.origin },
-        });
-        if (error) throw error;
-        toast({
-          title: "נרשמת בהצלחה!",
-          description: "נשלח אליך מייל אימות. אנא אשר את כתובת המייל שלך.",
-        });
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
     } catch (error: any) {
       toast({
         title: "שגיאה",
@@ -196,9 +183,9 @@ const Login = () => {
                   <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary text-primary-foreground mb-3 mx-auto shadow-lg shadow-primary/30 transition-transform duration-300 hover:scale-110">
                     <Users className="w-7 h-7" />
                   </div>
-                  <CardTitle className="text-xl">{isSignUp ? "הרשמה" : "התחברות"}</CardTitle>
+                  <CardTitle className="text-xl">התחברות</CardTitle>
                   <CardDescription>
-                    {isSignUp ? "צור חשבון חדש והתחל לנהל לקוחות" : "התחבר לחשבון שלך"}
+                    התחבר לחשבון שלך
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -237,7 +224,7 @@ const Login = () => {
                       </div>
                     </div>
                     <Button type="submit" className="w-full btn-hover shadow-md shadow-primary/20 gap-2" disabled={loading}>
-                      {loading ? "מעבד..." : isSignUp ? "הרשמה" : (
+                      {loading ? "מעבד..." : (
                         <>
                           התחברות
                           <ArrowLeft className="w-4 h-4" />
@@ -245,15 +232,6 @@ const Login = () => {
                       )}
                     </Button>
                   </form>
-                  <div className="mt-4 text-center">
-                    <button
-                      type="button"
-                      onClick={() => setIsSignUp(!isSignUp)}
-                      className="text-sm text-primary hover:underline transition-colors duration-200"
-                    >
-                      {isSignUp ? "כבר יש לך חשבון? התחבר" : "אין לך חשבון? הירשם"}
-                    </button>
-                  </div>
                 </CardContent>
               </Card>
             ) : (
