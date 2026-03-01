@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Cake, Mail, Phone, Building, Briefcase, Calendar, MessageSquare, Sparkles } from "lucide-react";
+import DemoGuard from "@/components/DemoGuard";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Customer = Tables<"customers">;
@@ -67,18 +68,26 @@ const CustomerProfile = () => {
         <Card className="md:col-span-2 card-hover animate-fade-in-up stagger-2">
           <CardHeader><CardTitle className="text-base flex items-center gap-2"><Sparkles className="w-4 h-4" /> פעולות מהירות</CardTitle></CardHeader>
           <CardContent className="grid md:grid-cols-2 gap-3">
-            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=birthday`)}>
-              🎂 צור ברכה
-            </Button>
-            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=holiday`)}>
-              🕯️ צור הודעת חג
-            </Button>
-            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=professional`)}>
-              💼 צור מסר מקצועי
-            </Button>
-            <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=marketing`)}>
-              📢 צור מסר שיווקי
-            </Button>
+            <DemoGuard>
+              <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=birthday`)}>
+                🎂 צור ברכה
+              </Button>
+            </DemoGuard>
+            <DemoGuard>
+              <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=holiday`)}>
+                🕯️ צור הודעת חג
+              </Button>
+            </DemoGuard>
+            <DemoGuard>
+              <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=professional`)}>
+                💼 צור מסר מקצועי
+              </Button>
+            </DemoGuard>
+            <DemoGuard>
+              <Button variant="outline" className="justify-start gap-2" onClick={() => navigate(`/messages/new?customerId=${customer.id}&category=marketing`)}>
+                📢 צור מסר שיווקי
+              </Button>
+            </DemoGuard>
           </CardContent>
         </Card>
       </div>

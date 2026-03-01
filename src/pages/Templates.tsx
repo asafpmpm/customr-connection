@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, FileText } from "lucide-react";
 import type { Tables, TablesInsert } from "@/integrations/supabase/types";
+import DemoGuard from "@/components/DemoGuard";
 
 type Template = Tables<"message_templates">;
 
@@ -63,7 +64,9 @@ const Templates = () => {
           <h1 className="text-2xl font-bold">תבניות הודעה</h1>
           <p className="text-muted-foreground text-sm">ניהול תבניות להודעות אישיות</p>
         </div>
-        <Button onClick={openNew} className="gap-2 btn-hover shadow-sm"><Plus className="w-4 h-4" /> תבנית חדשה</Button>
+        <DemoGuard>
+          <Button onClick={openNew} className="gap-2 btn-hover shadow-sm"><Plus className="w-4 h-4" /> תבנית חדשה</Button>
+        </DemoGuard>
       </div>
 
       <Select value={filterCategory} onValueChange={setFilterCategory}>
@@ -94,8 +97,12 @@ const Templates = () => {
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-base">{t.template_name}</CardTitle>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <Button size="icon" variant="ghost" onClick={() => openEdit(t)} className="hover:bg-primary/10"><Edit className="w-4 h-4" /></Button>
-                    <Button size="icon" variant="ghost" onClick={() => handleDelete(t.id)} className="hover:bg-destructive/10"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    <DemoGuard>
+                      <Button size="icon" variant="ghost" onClick={() => openEdit(t)} className="hover:bg-primary/10"><Edit className="w-4 h-4" /></Button>
+                    </DemoGuard>
+                    <DemoGuard>
+                      <Button size="icon" variant="ghost" onClick={() => handleDelete(t.id)} className="hover:bg-destructive/10"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    </DemoGuard>
                   </div>
                 </div>
               </CardHeader>

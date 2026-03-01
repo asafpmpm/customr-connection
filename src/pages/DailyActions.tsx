@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Cake, CalendarHeart, AlertCircle, CheckCircle, ListChecks, Megaphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
+import DemoGuard from "@/components/DemoGuard";
 
 type Customer = Tables<"customers">;
 type Event = Tables<"relationship_events"> & { customers?: { first_name: string; last_name: string } };
@@ -119,7 +120,9 @@ const DailyActions = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-pink-600">🎂 יום הולדת!</Badge>
-                      <Button size="sm" variant="outline" onClick={() => openMessageDialog(c.id, "birthday")}>צור הודעה</Button>
+                      <DemoGuard>
+                        <Button size="sm" variant="outline" onClick={() => openMessageDialog(c.id, "birthday")}>צור הודעה</Button>
+                      </DemoGuard>
                     </div>
                   </div>
                 ))}
@@ -143,7 +146,9 @@ const DailyActions = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-orange-600">🎂 מחר</Badge>
-                      <Button size="sm" variant="outline" onClick={() => openMessageDialog(c.id, "birthday")}>צור הודעה</Button>
+                      <DemoGuard>
+                        <Button size="sm" variant="outline" onClick={() => openMessageDialog(c.id, "birthday")}>צור הודעה</Button>
+                      </DemoGuard>
                     </div>
                   </div>
                 ))}
@@ -165,7 +170,9 @@ const DailyActions = () => {
                       <p className="font-medium">{t.customer.first_name} {t.customer.last_name}</p>
                       <p className="text-sm text-muted-foreground">{t.holiday.holiday_name} • {new Date(t.holiday.holiday_date).toLocaleDateString("he-IL")}</p>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => openMessageDialog(t.customer.id, "holiday")}>צור הודעה</Button>
+                      <DemoGuard>
+                        <Button size="sm" variant="outline" onClick={() => openMessageDialog(t.customer.id, "holiday")}>צור הודעה</Button>
+                      </DemoGuard>
                   </div>
                 ))}
               </CardContent>
@@ -189,10 +196,14 @@ const DailyActions = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button size="sm" variant="outline" onClick={() => openMessageDialog(ev.customer_id, "professional")}>צור הודעה</Button>
-                      <Button size="sm" variant="outline" onClick={() => handleMarkHandled(ev.id)} className="gap-1 btn-hover">
-                        <CheckCircle className="w-4 h-4" /> סמן כטופל
-                      </Button>
+                      <DemoGuard>
+                        <Button size="sm" variant="outline" onClick={() => openMessageDialog(ev.customer_id, "professional")}>צור הודעה</Button>
+                      </DemoGuard>
+                      <DemoGuard>
+                        <Button size="sm" variant="outline" onClick={() => handleMarkHandled(ev.id)} className="gap-1 btn-hover">
+                          <CheckCircle className="w-4 h-4" /> סמן כטופל
+                        </Button>
+                      </DemoGuard>
                     </div>
                   </div>
                 ))}

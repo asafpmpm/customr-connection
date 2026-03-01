@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import DemoGuard from "@/components/DemoGuard";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -220,24 +221,30 @@ const Dashboard = () => {
           <p className="text-muted-foreground text-sm">תמונת מצב מהירה</p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" onClick={() => navigate("/customers")} className="gap-2 btn-hover shadow-sm">
-            <Plus className="w-4 h-4" /> הוסף לקוח
-          </Button>
-          <Button size="sm" variant="outline" onClick={() => navigate("/campaigns")} className="gap-2 btn-hover">
-            <Megaphone className="w-4 h-4" /> צור קמפיין
-          </Button>
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={async () => {
-              await loadDemoData();
-              localStorage.setItem("guidedTour", "start");
-              window.dispatchEvent(new Event("guidedTourStart"));
-            }}
-            className="gap-2 btn-hover"
-          >
-            התחל דמו
-          </Button>
+          <DemoGuard>
+            <Button size="sm" onClick={() => navigate("/customers")} className="gap-2 btn-hover shadow-sm">
+              <Plus className="w-4 h-4" /> הוסף לקוח
+            </Button>
+          </DemoGuard>
+          <DemoGuard>
+            <Button size="sm" variant="outline" onClick={() => navigate("/campaigns")} className="gap-2 btn-hover">
+              <Megaphone className="w-4 h-4" /> צור קמפיין
+            </Button>
+          </DemoGuard>
+          <DemoGuard>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={async () => {
+                await loadDemoData();
+                localStorage.setItem("guidedTour", "start");
+                window.dispatchEvent(new Event("guidedTourStart"));
+              }}
+              className="gap-2 btn-hover"
+            >
+              התחל דמו
+            </Button>
+          </DemoGuard>
         </div>
       </div>
 

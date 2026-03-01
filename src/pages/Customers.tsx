@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, Edit, Trash2, Eye, Users } from "lucide-react";
 import type { Tables as DBTables, TablesInsert } from "@/integrations/supabase/types";
+import DemoGuard from "@/components/DemoGuard";
 
 type Customer = DBTables<"customers">;
 
@@ -135,9 +136,11 @@ const Customers = () => {
           <h1 className="text-2xl font-bold">לקוחות</h1>
           <p className="text-muted-foreground text-sm">{customers.length} לקוחות במערכת</p>
         </div>
-        <Button onClick={openNew} className="gap-2 btn-hover shadow-sm">
-          <Plus className="w-4 h-4" /> הוסף לקוח
-        </Button>
+        <DemoGuard>
+          <Button onClick={openNew} className="gap-2 btn-hover shadow-sm">
+            <Plus className="w-4 h-4" /> הוסף לקוח
+          </Button>
+        </DemoGuard>
       </div>
 
       <div className="grid gap-3 md:grid-cols-4 items-end animate-fade-in-up stagger-1">
@@ -223,8 +226,12 @@ const Customers = () => {
                     <TableCell>
                       <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
                         <Button size="icon" variant="ghost" onClick={() => navigate(`/customers/${c.id}`)} className="hover:bg-primary/10 transition-colors"><Eye className="w-4 h-4" /></Button>
-                        <Button size="icon" variant="ghost" onClick={() => openEdit(c)} className="hover:bg-primary/10 transition-colors"><Edit className="w-4 h-4" /></Button>
-                        <Button size="icon" variant="ghost" onClick={() => handleDelete(c.id)} className="hover:bg-destructive/10 transition-colors"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                        <DemoGuard>
+                          <Button size="icon" variant="ghost" onClick={() => openEdit(c)} className="hover:bg-primary/10 transition-colors"><Edit className="w-4 h-4" /></Button>
+                        </DemoGuard>
+                        <DemoGuard>
+                          <Button size="icon" variant="ghost" onClick={() => handleDelete(c.id)} className="hover:bg-destructive/10 transition-colors"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                        </DemoGuard>
                       </div>
                     </TableCell>
                   </TableRow>

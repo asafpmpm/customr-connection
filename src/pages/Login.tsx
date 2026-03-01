@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "@/hooks/useDemoMode";
 import {
   Users, Mail, Lock, CheckCircle, MessageSquare, Target,
-  BarChart3, Calendar, Sparkles, ArrowLeft
+  BarChart3, Calendar, Sparkles, ArrowLeft, Play
 } from "lucide-react";
 
 const features = [
@@ -45,7 +47,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+  const isAdmin = searchParams.get("admin") === "true";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +80,25 @@ const Login = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    setDemoLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: DEMO_EMAIL,
+        password: DEMO_PASSWORD,
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "שגיאה בכניסה לדמו",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setDemoLoading(false);
     }
   };
 
@@ -136,71 +160,103 @@ const Login = () => {
 
           {/* Login Form Side */}
           <div className="order-1 lg:order-2 animate-fade-in-up stagger-2">
-            <Card className="shadow-2xl border-0 glass-effect max-w-md mx-auto lg:mx-0 lg:mr-auto">
-              <CardHeader className="text-center pb-2">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary text-primary-foreground mb-3 mx-auto shadow-lg shadow-primary/30 transition-transform duration-300 hover:scale-110">
-                  <Users className="w-7 h-7" />
-                </div>
-                <CardTitle className="text-xl">{isSignUp ? "הרשמה" : "התחברות"}</CardTitle>
-                <CardDescription>
-                  {isSignUp ? "צור חשבון חדש והתחל לנהל לקוחות" : "התחבר לחשבון שלך"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">אימייל</Label>
-                    <div className="relative group">
-                      <Mail className="absolute right-3 top-3 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="your@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="pr-10 transition-shadow duration-200 focus:shadow-md focus:shadow-primary/10"
-                        required
-                        dir="ltr"
-                      />
-                    </div>
+            {isAdmin ? (
+              <Card className="shadow-2xl border-0 glass-effect max-w-md mx-auto lg:mx-0 lg:mr-auto">
+                <CardHeader className="text-center pb-2">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary text-primary-foreground mb-3 mx-auto shadow-lg shadow-primary/30 transition-transform duration-300 hover:scale-110">
+                    <Users className="w-7 h-7" />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">סיסמה</Label>
-                    <div className="relative group">
-                      <Lock className="absolute right-3 top-3 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="pr-10 transition-shadow duration-200 focus:shadow-md focus:shadow-primary/10"
-                        required
-                        dir="ltr"
-                        minLength={6}
-                      />
+                  <CardTitle className="text-xl">{isSignUp ? "הרשמה" : "התחברות"}</CardTitle>
+                  <CardDescription>
+                    {isSignUp ? "צור חשבון חדש והתחל לנהל לקוחות" : "התחבר לחשבון שלך"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">אימייל</Label>
+                      <div className="relative group">
+                        <Mail className="absolute right-3 top-3 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="your@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="pr-10 transition-shadow duration-200 focus:shadow-md focus:shadow-primary/10"
+                          required
+                          dir="ltr"
+                        />
+                      </div>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="password">סיסמה</Label>
+                      <div className="relative group">
+                        <Lock className="absolute right-3 top-3 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="pr-10 transition-shadow duration-200 focus:shadow-md focus:shadow-primary/10"
+                          required
+                          dir="ltr"
+                          minLength={6}
+                        />
+                      </div>
+                    </div>
+                    <Button type="submit" className="w-full btn-hover shadow-md shadow-primary/20 gap-2" disabled={loading}>
+                      {loading ? "מעבד..." : isSignUp ? "הרשמה" : (
+                        <>
+                          התחברות
+                          <ArrowLeft className="w-4 h-4" />
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                  <div className="mt-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => setIsSignUp(!isSignUp)}
+                      className="text-sm text-primary hover:underline transition-colors duration-200"
+                    >
+                      {isSignUp ? "כבר יש לך חשבון? התחבר" : "אין לך חשבון? הירשם"}
+                    </button>
                   </div>
-                  <Button type="submit" className="w-full btn-hover shadow-md shadow-primary/20 gap-2" disabled={loading}>
-                    {loading ? "מעבד..." : isSignUp ? "הרשמה" : (
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="shadow-2xl border-0 glass-effect max-w-md mx-auto lg:mx-0 lg:mr-auto">
+                <CardHeader className="text-center pb-2">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary text-primary-foreground mb-3 mx-auto shadow-lg shadow-primary/30 transition-transform duration-300 hover:scale-110">
+                    <Play className="w-7 h-7" />
+                  </div>
+                  <CardTitle className="text-xl">נסה את המערכת</CardTitle>
+                  <CardDescription>
+                    היכנס למצב דמו וחווה את המערכת — בצפייה בלבד
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button
+                    onClick={handleDemoLogin}
+                    className="w-full btn-hover shadow-md shadow-primary/20 gap-2 text-lg py-6"
+                    disabled={demoLoading}
+                    size="lg"
+                  >
+                    {demoLoading ? "נכנס..." : (
                       <>
-                        התחברות
-                        <ArrowLeft className="w-4 h-4" />
+                        <Play className="w-5 h-5" />
+                        התחל דמו חינם
                       </>
                     )}
                   </Button>
-                </form>
-                <div className="mt-4 text-center">
-                  <button
-                    type="button"
-                    onClick={() => setIsSignUp(!isSignUp)}
-                    className="text-sm text-primary hover:underline transition-colors duration-200"
-                  >
-                    {isSignUp ? "כבר יש לך חשבון? התחבר" : "אין לך חשבון? הירשם"}
-                  </button>
-                </div>
-              </CardContent>
-            </Card>
+                  <p className="text-xs text-muted-foreground text-center">
+                    ניווט חופשי בין כל המסכים • נתוני דוגמה • ללא הרשמה
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </section>

@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Megaphone, Send, FileCheck } from "lucide-react";
 import type { Tables, TablesInsert } from "@/integrations/supabase/types";
+import DemoGuard from "@/components/DemoGuard";
 
 type Campaign = Tables<"campaigns">;
 
@@ -49,7 +50,9 @@ const Campaigns = () => {
           <h1 className="text-2xl font-bold">קמפיינים</h1>
           <p className="text-muted-foreground text-sm">ניהול קמפיינים ממוקדים</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)} className="gap-2 btn-hover shadow-sm"><Plus className="w-4 h-4" /> קמפיין חדש</Button>
+        <DemoGuard>
+          <Button onClick={() => setDialogOpen(true)} className="gap-2 btn-hover shadow-sm"><Plus className="w-4 h-4" /> קמפיין חדש</Button>
+        </DemoGuard>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -77,14 +80,18 @@ const Campaigns = () => {
                 <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{c.body_template}</p>
                 <div className="flex gap-2">
                   {c.status === "draft" && (
-                    <Button size="sm" variant="outline" className="gap-1 btn-hover" onClick={() => updateStatus(c.id, "ready")}>
-                      <FileCheck className="w-3 h-3" /> סמן כמוכן
-                    </Button>
+                    <DemoGuard>
+                      <Button size="sm" variant="outline" className="gap-1 btn-hover" onClick={() => updateStatus(c.id, "ready")}>
+                        <FileCheck className="w-3 h-3" /> סמן כמוכן
+                      </Button>
+                    </DemoGuard>
                   )}
                   {c.status === "ready" && (
-                    <Button size="sm" variant="outline" className="gap-1 btn-hover" onClick={() => updateStatus(c.id, "sent_simulated")}>
-                      <Send className="w-3 h-3" /> סמן כנשלח
-                    </Button>
+                    <DemoGuard>
+                      <Button size="sm" variant="outline" className="gap-1 btn-hover" onClick={() => updateStatus(c.id, "sent_simulated")}>
+                        <Send className="w-3 h-3" /> סמן כנשלח
+                      </Button>
+                    </DemoGuard>
                   )}
                 </div>
               </CardContent>
