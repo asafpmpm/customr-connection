@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, CalendarHeart, CheckCircle } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import DemoGuard from "@/components/DemoGuard";
 
 type Event = Tables<"relationship_events"> & { customers?: { first_name: string; last_name: string } };
 
@@ -67,9 +68,11 @@ const Events = () => {
           <h1 className="text-2xl font-bold">אירועים</h1>
           <p className="text-muted-foreground text-sm">ניהול אירועי קשר</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)} className="gap-2 btn-hover shadow-sm">
-          <Plus className="w-4 h-4" /> הוסף אירוע
-        </Button>
+        <DemoGuard>
+          <Button onClick={() => setDialogOpen(true)} className="gap-2 btn-hover shadow-sm">
+            <Plus className="w-4 h-4" /> הוסף אירוע
+          </Button>
+        </DemoGuard>
       </div>
 
       <div className="flex gap-3 flex-wrap animate-fade-in-up stagger-1">
@@ -126,9 +129,11 @@ const Events = () => {
                     {ev.status === "handled" ? "טופל" : "פתוח"}
                   </Badge>
                   {ev.status === "open" && (
-                    <Button size="sm" variant="ghost" onClick={() => handleMarkHandled(ev.id)} className="gap-1 btn-hover">
-                      <CheckCircle className="w-4 h-4" /> סמן כטופל
-                    </Button>
+                    <DemoGuard>
+                      <Button size="sm" variant="ghost" onClick={() => handleMarkHandled(ev.id)} className="gap-1 btn-hover">
+                        <CheckCircle className="w-4 h-4" /> סמן כטופל
+                      </Button>
+                    </DemoGuard>
                   )}
                 </div>
               </CardContent>

@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { FileText, Pencil, Eye, Save, CheckCircle, Send } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import DemoGuard from "@/components/DemoGuard";
 
 const statusLabels: Record<string, string> = {
   draft: "טיוטה",
@@ -224,9 +225,15 @@ const MessageComposer = () => {
       )}
 
       <div className="flex flex-wrap gap-2">
-        <Button onClick={saveDraft} className="gap-2"><Save className="w-4 h-4" /> שמור טיוטה</Button>
-        <Button variant="outline" onClick={() => updateStatus("ready")} className="gap-2"><CheckCircle className="w-4 h-4" /> סמן כמוכן</Button>
-        <Button variant="outline" onClick={() => updateStatus("sent_simulated")} className="gap-2"><Send className="w-4 h-4" /> סמן כנשלח</Button>
+        <DemoGuard>
+          <Button onClick={saveDraft} className="gap-2"><Save className="w-4 h-4" /> שמור טיוטה</Button>
+        </DemoGuard>
+        <DemoGuard>
+          <Button variant="outline" onClick={() => updateStatus("ready")} className="gap-2"><CheckCircle className="w-4 h-4" /> סמן כמוכן</Button>
+        </DemoGuard>
+        <DemoGuard>
+          <Button variant="outline" onClick={() => updateStatus("sent_simulated")} className="gap-2"><Send className="w-4 h-4" /> סמן כנשלח</Button>
+        </DemoGuard>
       </div>
     </div>
   );
